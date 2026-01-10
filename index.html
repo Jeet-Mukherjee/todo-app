@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-do App</title>
+    <!-- Add this in your <head> -->
+    <!-- <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"> -->
+    <link rel="stylesheet" href="newStyle.css">
+</head>
+
+<body>
+    <main class="container">
+        <div class="taskInputContainer">
+            <input type="text" id="taskInput" placeholder="Enter task" maxlength="30">
+            <!-- <button id="addBtn">Add Task</button> -->
+            <button id="lastTaskBtn">Delete Last Task</button>
+            <button id="clearCTaskBtn">Clear Completed Tasks</button>
+        </div>
+
+        <div class="filters">
+            <button data-filter="all">All</button>
+            <button data-filter="pending">Pending</button>
+            <button data-filter="completed">Completed</button>
+        </div>
+        <div id="msgContainer">
+            <p id="tasksCount"></p>
+            <p id="msgElement" class="hidden"></p>
+
+        </div>
+        <ul id="taskList"></ul>
+
+    </main>
+    <script type="module" src="main.js"></script>
+</body>
+
+</html>

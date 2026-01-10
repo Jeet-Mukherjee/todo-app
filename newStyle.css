@@ -1,0 +1,313 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /* min-height: 100vh; */
+    min-height: 100vh;
+    max-height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    user-select: none;
+}
+
+/* Filter buttons */
+div.filters {
+    margin-bottom: 20px;
+    width: fit-content;
+    display: flex;
+    gap: 10px;
+    background: white;
+    padding: 8px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+div.filters button {
+    padding: 8px 16px;
+    border: none;
+    background: #f3f4f6;
+    color: #374151;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+div.filters button:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Input section */
+.taskInputContainer {
+    margin-bottom: 20px;
+    width: fit-content;
+    display: flex;
+    gap: 10px;
+    /* background: none; */
+    /* padding: 8px; */
+    border-radius: 12px;
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+
+}
+
+#taskInput {
+    width: 300px;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    /* margin-bottom: 12px; */
+}
+
+#taskInput:focus {
+    outline: 3px solid #764ba2;
+}
+
+/* Action buttons */
+#addBtn,
+#lastTaskBtn,
+#clearCTaskBtn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    /* margin: 0 6px 20px 6px; */
+}
+
+#addBtn {
+    background: #10b981;
+    color: white;
+}
+
+#addBtn:hover {
+    background: #059669;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+#lastTaskBtn {
+    background: #ef4444;
+    color: white;
+}
+
+#lastTaskBtn:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+#clearCTaskBtn {
+    background: #ef4444;
+    color: white;
+}
+
+#clearCTaskBtn:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+/* Task list */
+ul#taskList {
+    list-style: none;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    min-width: 500px;
+    max-width: fit-content;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 5px;
+    max-height: 450px;
+    /* overflow: hidden; */
+    overflow-y: auto;
+}
+
+/* Individual task items */
+li {
+    font-size: 16px;
+    font-weight: 400;
+    margin: 8px 0;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 100%;
+    background: #f9fafb;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+li:hover {
+    background: #f3f4f6;
+    transform: translateX(4px);
+}
+
+/* Checkbox styling */
+li input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #667eea;
+}
+
+/* Task title */
+li span {
+    flex: 1;
+    color: #374151;
+    cursor: pointer;
+}
+
+/* Task input when editing */
+li input[type="text"] {
+    flex: 1;
+    padding: 6px 10px;
+    border: 2px solid #667eea;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+li input[type="text"]:focus {
+    outline: none;
+    border-color: #764ba2;
+}
+
+/* Completed task styling */
+li.completed span {
+    text-decoration: line-through;
+    /* opacity: 0.5; */
+    color: #9ca3af;
+}
+
+/* Delete button */
+li button {
+    margin-left: auto;
+    padding: 6px 12px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+li button:hover {
+    background: #dc2626;
+    transform: scale(1.05);
+}
+
+li button:disabled {
+    /* Your styles here */
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Responsive design */
+@media (max-width: 500px) {
+    ul#taskList {
+        min-width: auto;
+        width: 100%;
+    }
+
+    #taskInput {
+        width: 100%;
+    }
+}
+
+
+
+div.filters button.active {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Message container */
+#msgContainer {
+    min-height: 40px;
+    max-width: fit-content;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+#msgElement {
+    background: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #059669;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    animation: slideIn 0.3s ease-out;
+}
+
+#msgElement.hidden {
+    display: none;
+}
+
+#tasksCount {
+    max-width: fit-content;
+    /* margin-bottom: 20px; */
+    background: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #059669;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    animation: slideIn 0.3s ease-out;
+}
+
+ul#taskList p.notify {
+    text-align: center;
+    color: #9ca3af;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 15px;
+    font-style: italic;
+}
+
+/* custom scrollbar */
+
+ul#taskList::-webkit-scrollbar {
+    width: 6px;
+}
+
+ul#taskList::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+ul#taskList::-webkit-scrollbar-thumb {
+    background: rgba(102, 126, 234, 0.3);
+    border-radius: 10px;
+}
+
+ul#taskList::-webkit-scrollbar-thumb:hover {
+    background: rgba(102, 126, 234, 0.6);
+}
+
+ul#taskList {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(102, 126, 234, 0.5) transparent;
+}
