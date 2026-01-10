@@ -37,21 +37,3 @@ Currently working on:
 ## How to Run
 
 Simply open `index.html` in a web browser. No build process required!
-```
-
-## Step 4: Create a .gitignore file (optional but recommended)
-
-Create a file named `.gitignore`:
-```
-# OS files
-.DS_Store
-Thumbs.db
-
-# Editor files
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Optional: if you add node_modules later
-node_modules/
