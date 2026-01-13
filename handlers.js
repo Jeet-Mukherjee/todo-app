@@ -48,10 +48,9 @@ export function countFilteredTasksHandler() {
     tasksCountEl.textContent = `${filterName} tasks: ${taskList.length} / ${tasks.length}`;
 }
 
-export function filterBySearchHandler(searchValue) {
+export function filterBySearchHandler() {
     const taskList = filterTasksHandler(currentFilter);
-    if (!searchValue || !searchValue.trim()) { return taskList; }
-    setSearchQuery(searchValue);
+    if (!searchQuery || !searchQuery.trim()) { return taskList; }
     const searchList = taskList.filter(t => t.title.toLowerCase().includes(searchQuery.toLowerCase()));
     return searchList;
 }
@@ -88,6 +87,8 @@ export const emptyStateMsg = (() => {
 })();
 
 
+
+
 export const duplicateTaskMsg = (() => {
     let msgTimeoutId = null;
 
@@ -104,7 +105,21 @@ export const duplicateTaskMsg = (() => {
             }, 3000);
         }
     }
-
 })();
+
+
+// bug => count.length dont show 0
+export function updateSearchCount() {
+    const filteredCountEl = document.querySelector("p#filteredCount");
+    if (!filteredCountEl) return;
+
+    if (searchQuery !== "" && searchQuery.trim() !== "") {
+        const searchedTaskList = filterBySearchHandler(searchQuery);
+        filteredCountEl.classList.remove("hidden");
+        filteredCountEl.textContent = `${searchedTaskList.length} tasks match "${searchQuery}"`;
+    } else {
+        filteredCountEl.classList.add("hidden");
+    }
+}
 
 

@@ -1,17 +1,18 @@
 // Manages rendering tasks to the DOM
-import { countFilteredTasksHandler, filterBySearchHandler, filterTasksHandler, updateFilterButtons } from "./handlers.js";
+import { countFilteredTasksHandler, filterBySearchHandler, updateFilterButtons, updateSearchCount } from "./handlers.js";
 import { currentFilter, editingTaskId, searchQuery } from "./state.js";
 
 // Renders filtered tasks to the DOM based on current filter and editing state
 export function renderTasks() {
-    // get the current filter
-    const taskList = filterBySearchHandler(searchQuery);
-    const taskListEl = document.getElementById("taskList");
+    const taskList = filterBySearchHandler();
+    const taskListEl = document.querySelector("ul#taskList");
     let taskListTitle = currentFilter + " tasks";
-    taskListEl.innerText = taskListTitle.toLocaleUpperCase();
+    taskListEl.innerText = taskListTitle.toUpperCase();
     let noTaskMsg = "no tasks yet";
 
     if (taskList.length === 0) {
+        const filteredCount = document.querySelector("p#filteredCount");
+        filteredCount.classList.add("hidden");
         const taskMsgEl = document.createElement("p");
         taskMsgEl.classList.add("notify");
         if (searchQuery !== "") {
@@ -27,6 +28,7 @@ export function renderTasks() {
         handleButtonStates(); // need attention
         updateFilterButtons();
         countFilteredTasksHandler();
+        // updateSearchCount();
         return;
     }
 
@@ -90,6 +92,7 @@ export function renderTasks() {
     handleButtonStates();
     updateFilterButtons();
     countFilteredTasksHandler();
+    updateSearchCount();
 }
 
 

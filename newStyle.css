@@ -316,6 +316,21 @@ div.filters button.active {
     animation: slideIn 0.3s ease-out;
 }
 
+#filteredCount {
+    background: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #059669;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    animation: slideIn 0.3s ease-out;
+}
+
+#filteredCount.hidden {
+    display: none;
+}
+
 #msgElement.hidden {
     display: none;
 }

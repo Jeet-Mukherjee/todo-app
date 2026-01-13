@@ -16,12 +16,9 @@ export function addTaskEvent() {
             return;
         }
     });
-    // event listner for add button 
-    const addTaskButton = document.getElementById("addBtn");
-    if (!addTaskButton) return;
-    addTaskButton.addEventListener('click', () => {
-        addTaskHandler(addTaskInputElement);
-    });
+    addTaskInputElement.addEventListener("blur", () => {
+        addTaskInputElement.value = ""
+    })
 }
 
 export function editTitleEvent() {
@@ -210,6 +207,12 @@ export function FilterBySearchEvent() {
     taskSearchEl.addEventListener("input", (e) => {
         const searchValue = e.target.value;
         setSearchQuery(searchValue);
+        renderTasks();
+    });
+
+    taskSearchEl.addEventListener("blur", () => {
+        taskSearchEl.value = "";
+        setSearchQuery("");
         renderTasks();
     })
 }
