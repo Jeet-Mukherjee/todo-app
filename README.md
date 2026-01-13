@@ -8,14 +8,14 @@ A modular todo application built with vanilla JavaScript to practice clean code 
 - Mark tasks as completed
 - Filter tasks (All/Pending/Completed)
 - Clear completed tasks
+- Clear all tasks
 - Data persistence using localStorage
+- tasks search/filter by text(partial)
 
 ## Status: Work in Progress
 
 Currently working on:
-- [ ] escape event for add task
-- [ ] clear all task button
-- [ ] tasks search/filter by text
+- [ ] task counter with search
 - [ ] undo last delete
 - [ ] task reordering (drag & drop or up/down buttons)
 

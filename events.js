@@ -1,57 +1,86 @@
-import { tasks, addTask, removeLastTask, setTasks, editingTaskId, setEditingTaskId, setCurrentFilter, currentFilter } from "./state.js";
+import { tasks, setTasks, editingTaskId, setEditingTaskId, setCurrentFilter, currentFilter, setSearchQuery } from "./state.js";
 import { saveFilter, saveTasks } from "./storage.js";
 import { renderTasks } from "./render.js";
+import { countClearTasksMsg, addTaskHandler, duplicateTaskMsg, filterTasksHandler, emptyStateMsg } from "./handlers.js";
 
-export function addTaskHandler(inputElement) {
-    const userTitle = inputElement.value.trim().replace(/\s+/g, ' ');
-    if (!userTitle) return;
-    duplicateTaskMsg(userTitle);
-    addTask(userTitle);
-    saveTasks();
-    renderTasks();
-    inputElement.value = "";
-}
+export function addTaskEvent() {
 
-export function updateFilterButtons() {
-    const filterButtons = document.querySelectorAll("div.filters button");
-
-    filterButtons.forEach(button => {
-        const buttonFilter = button.dataset.filter;
-
-        if (buttonFilter === currentFilter) {
-            button.classList.add("active");
-        } else {
-            button.classList.remove("active");
+    const addTaskInputElement = document.querySelector("input#taskInput");
+    if (!addTaskInputElement) return;
+    addTaskInputElement.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            addTaskHandler(addTaskInputElement);
         }
+        if (e.key === "Escape") {
+            addTaskInputElement.value = "";
+            return;
+        }
+    });
+    // event listner for add button 
+    const addTaskButton = document.getElementById("addBtn");
+    if (!addTaskButton) return;
+    addTaskButton.addEventListener('click', () => {
+        addTaskHandler(addTaskInputElement);
     });
 }
 
-export function filterTasksHandler(currentFilter) {
-    let filteredTasks;
+export function editTitleEvent() {
 
-    if (currentFilter === "all") {
-        filteredTasks = tasks;
-    }
-    else if (currentFilter === "completed") {
-        filteredTasks = tasks.filter(t => t.completed === true);
-    }
-    else if (currentFilter === "pending") {
-        filteredTasks = tasks.filter(t => t.completed === false);
-    }
-    return filteredTasks;
-}
+    const elTaskListContainer = document.querySelector("ul#taskList");
 
-export function countFilteredTasksHandler() {
-    const taskList = filterTasksHandler(currentFilter);
-    const tasksCountEl = document.querySelector("p#tasksCount");
-    const filterName = currentFilter.charAt(0).toUpperCase() + currentFilter.slice(1);
-    tasksCountEl.textContent = `${filterName} tasks: ${taskList.length} / ${tasks.length}`;
-}
+    elTaskListContainer.addEventListener("click", (e) => {
+
+        const taskTitleElement = e.target.closest("span");
+        const taskContainer = e.target.closest("li");
+        if (!taskTitleElement || !taskContainer) return;
+
+        setEditingTaskId(Number(taskContainer.dataset.id));
+
+        renderTasks();
+        const targetContainer = document.querySelector(`li[data-id="${editingTaskId}"]`);
+        if (!targetContainer) return;
+
+        const taskInputElement = targetContainer.querySelector('input[type="text"]');
+        if (!taskInputElement) return;
+
+        taskInputElement.focus();
+
+        taskInputElement.addEventListener("keydown", (e) => {
+
+            let newTitle = taskInputElement.value.trim().replace(/\s+/g, ' ');
+            let taskToEdit = tasks.find(t => t.id === editingTaskId);
+            if (e.key === "Enter") {
+                let oldTitle = taskToEdit.title;
+                if (!newTitle || (oldTitle === newTitle)) {
+                    e.preventDefault();
+                    return;
+                }
+                duplicateTaskMsg(newTitle);
+                taskToEdit.title = newTitle;
+                setEditingTaskId(null);
+                saveTasks();
+                renderTasks();
+            }
+            else if (e.key === "Escape") {
+                setEditingTaskId(null);
+                renderTasks();
+                return;
+            }
+
+        });
+
+        taskInputElement.addEventListener("blur", () => {
+            if (editingTaskId === null) return;
+            setEditingTaskId(null);
+            renderTasks();
+        });
+    })
+};
 
 export function toggleCheckboxEvent() {
 
     // event delegation for toggle checkbox of tasks
-    const elTaskListContainer = document.getElementById("taskList")
+    const elTaskListContainer = document.getElementById("taskList");
 
     elTaskListContainer.addEventListener("change", (e) => {
         if (e.target.type !== "checkbox") return;
@@ -70,22 +99,7 @@ export function toggleCheckboxEvent() {
     });
 }
 
-export function addTaskEvent() {
 
-    const addTaskInputElement = document.querySelector("input#taskInput");
-    if (!addTaskInputElement) return;
-    addTaskInputElement.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-            addTaskHandler(addTaskInputElement);
-        }
-    });
-    // event listner for add button 
-    const addTaskButton = document.getElementById("addBtn");
-    if (!addTaskButton) return;
-    addTaskButton.addEventListener('click', () => {
-        addTaskHandler(addTaskInputElement);
-    });
-}
 
 export function delLastTaskEvent() {
     const delLastTaskBtn = document.querySelector("button#lastTaskBtn");
@@ -94,7 +108,10 @@ export function delLastTaskEvent() {
     };
     delLastTaskBtn.addEventListener("click", () => {
         const taskList = filterTasksHandler(currentFilter);
-        if (taskList.length === 0) return;
+        if (taskList.length === 0) {
+            emptyStateMsg();
+            return;
+        }
         // removeLastTask(taskList);
         const lastTask = taskList[taskList.length - 1];
         const newTasks = tasks.filter(t => t.id !== lastTask.id);
@@ -137,10 +154,14 @@ export function delTaskByIdEvent() {
 export function deleteCompletedTasksEvent() {
     const clearCTaskBtn = document.querySelector("button#clearCTaskBtn");
     if (!clearCTaskBtn) return;
-    clearCTaskBtn.addEventListener('click', (e) => {
+    clearCTaskBtn.addEventListener('click', () => {
         const comletedTasksCount = tasks.filter(t => t.completed === true).length;
-        if (comletedTasksCount === 0) return;
-        clearTaskMsg(comletedTasksCount);
+        if (isNaN(comletedTasksCount)) return;
+        if (comletedTasksCount === 0) {
+            emptyStateMsg();
+        } else {
+            countClearTasksMsg(comletedTasksCount);
+        }
         const filteredTasks = tasks.filter(t => t.completed === false);
         setTasks(filteredTasks);
         saveTasks();
@@ -148,58 +169,32 @@ export function deleteCompletedTasksEvent() {
     });
 }
 
-export function editTitleEvent() {
-
-    const elTaskListContainer = document.querySelector("ul#taskList");
-
-    elTaskListContainer.addEventListener("click", (e) => {
-        const taskTitleElement = e.target.closest("span");
-        const taskContainer = e.target.closest("li");
-        if (!taskTitleElement || !taskContainer) return;
-
-        setEditingTaskId(Number(taskContainer.dataset.id));
-
+export function deleteAllTasksEvent() {
+    const clearAllTasksBtn = document.querySelector("#clearAllTasksBtn");
+    if (!clearAllTasksBtn) {
+        return;
+    }
+    clearAllTasksBtn.addEventListener("click", () => {
+        let tasksCount = tasks.length;
+        if (tasksCount === 0) {
+            emptyStateMsg();
+        } else {
+            countClearTasksMsg(tasksCount);
+        }
+        setTasks([]);
+        saveTasks();
         renderTasks();
-        const targetContainer = document.querySelector(`li[data-id="${editingTaskId}"]`);
-        if (!targetContainer) return;
+    });
+}
 
-        const taskInputElement = targetContainer.querySelector('input[type="text"]');
-        if (!taskInputElement) return;
-
-        taskInputElement.focus();
-
-        taskInputElement.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-                let taskToEdit = tasks.find(t => t.id === editingTaskId);
-                let oldTitle = taskToEdit.title;
-                let newTitle = taskInputElement.value.trim()
-                if (!newTitle || (oldTitle === newTitle)) { // new addition
-                    e.preventDefault();
-                    return;
-                }
-                duplicateTaskMsg(newTitle);
-                taskToEdit.title = newTitle;
-                setEditingTaskId(null);
-                saveTasks();
-                renderTasks();
-            }
-        });
-
-        taskInputElement.addEventListener("blur", () => {
-            if (editingTaskId === null) return;
-            setEditingTaskId(null);
-            renderTasks();
-        })
-    })
-};
 
 export function editCurrentFilterEvent() {
     const filterContainer = document.querySelector("div.filters");
     if (!filterContainer) return;
     filterContainer.addEventListener("click", (e) => {
-        const clickedButtonElement = e.target.closest("button");
-        if (!clickedButtonElement) return;
-        const selectedFilter = clickedButtonElement.dataset.filter;
+        const clickedButtonEl = e.target.closest("button");
+        if (!clickedButtonEl) return;
+        const selectedFilter = clickedButtonEl.dataset.filter;
         setCurrentFilter(selectedFilter);
         saveFilter(currentFilter);
         saveTasks();
@@ -208,46 +203,13 @@ export function editCurrentFilterEvent() {
 }
 
 
+export function FilterBySearchEvent() {
+    const taskSearchEl = document.querySelector("input#taskSearch");
+    if (!taskSearchEl) return;
 
-export const clearTaskMsg = (() => {
-    let msgTimeoutId = null; // private variable
-
-    return function (count) {
-        clearTimeout(msgTimeoutId); // uses the timeout id from closure
-        const msgElement = document.querySelector("p#msgElement");
-        msgElement.textContent = count + " Tasks Cleared";
-        msgElement.classList.remove("hidden");
-        msgTimeoutId = setTimeout(() => {
-            msgElement.textContent = ""; // Non-breaking space
-            msgElement.classList.add("hidden");
-        }, 3000);
-    };
-})();
-
-
-export const duplicateTaskMsg = (() => {
-    let msgTimeoutId = null;
-
-    return function (taskTitle) {
-        const isDuplicate = tasks.some(t => t.title.toLowerCase() === taskTitle.toLowerCase());
-        if (isDuplicate) {
-            clearTimeout(msgTimeoutId);
-            const msgElement = document.querySelector("p#msgElement");
-            msgElement.textContent = "Duplicate task added";
-            msgElement.classList.remove("hidden");
-            msgTimeoutId = setTimeout(() => {
-                msgElement.textContent = "";
-                msgElement.classList.add("hidden");
-            }, 3000);
-        }
-    }
-
-})();
-
-export function handleButtonStates() {
-    const isEditing = editingTaskId !== null;
-    const clrCTaskBtn = document.querySelector("button#clearCTaskBtn");
-    const delLastTaskBtn = document.querySelector("button#lastTaskBtn");
-    clrCTaskBtn.disabled = isEditing;
-    delLastTaskBtn.disabled = isEditing;
+    taskSearchEl.addEventListener("input", (e) => {
+        const searchValue = e.target.value;
+        setSearchQuery(searchValue);
+        renderTasks();
+    })
 }

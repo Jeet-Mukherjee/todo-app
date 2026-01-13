@@ -5,20 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-do App</title>
-    <!-- Add this in your <head> -->
-    <!-- <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"> -->
     <link rel="stylesheet" href="newStyle.css">
 </head>
 
 <body>
     <main class="container">
-        <div class="taskInputContainer">
-            <input type="text" id="taskInput" placeholder="Enter task" maxlength="30">
-            <!-- <button id="addBtn">Add Task</button> -->
-            <button id="lastTaskBtn">Delete Last Task</button>
-            <button id="clearCTaskBtn">Clear Completed Tasks</button>
-        </div>
-
         <div class="filters">
             <button data-filter="all">All</button>
             <button data-filter="pending">Pending</button>
@@ -27,8 +18,18 @@
         <div id="msgContainer">
             <p id="tasksCount"></p>
             <p id="msgElement" class="hidden"></p>
-
         </div>
+        <div class="taskInputContainer">
+            <input type="text" id="taskInput" placeholder="Add a task, press Enter" maxlength="30">
+            <input type="text" id="taskSearch" placeholder="Search a task, press Enter" maxlength="30">
+        </div>
+        <div class="buttonContainer">
+            <!-- <button id="addBtn">Add Task</button> -->
+            <button id="lastTaskBtn">Delete Last Task</button>
+            <button id="clearCTaskBtn">Clear Completed Tasks</button>
+            <button id="clearAllTasksBtn">Clear All Tasks</button>
+        </div>
+
         <ul id="taskList"></ul>
 
     </main>

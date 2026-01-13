@@ -60,7 +60,7 @@ div.filters button:hover {
 }
 
 #taskInput {
-    width: 300px;
+    width: fit-content;
     padding: 12px 16px;
     border: none;
     border-radius: 8px;
@@ -73,10 +73,37 @@ div.filters button:hover {
     outline: 3px solid #764ba2;
 }
 
+#taskSearch {
+    width: fit-content;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    /* margin-bottom: 12px; */
+}
+
+#taskSearch:focus {
+    outline: 3px solid #764ba2;
+}
+
+div.buttonContainer {
+    margin-bottom: 20px;
+    width: fit-content;
+    display: flex;
+    gap: 10px;
+    /* background: none; */
+    /* padding: 8px; */
+    border-radius: 12px;
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+
+}
+
 /* Action buttons */
 #addBtn,
 #lastTaskBtn,
-#clearCTaskBtn {
+#clearCTaskBtn,
+#clearAllTasksBtn {
     padding: 12px 24px;
     border: none;
     border-radius: 8px;
@@ -120,6 +147,17 @@ div.filters button:hover {
     box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
 }
 
+#clearAllTasksBtn {
+    background-color: #ef4444;
+    color: white;
+}
+
+#clearAllTasksBtn:hover {
+    background-color: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
 /* Task list */
 ul#taskList {
     list-style: none;
@@ -133,7 +171,7 @@ ul#taskList {
     font-weight: 600;
     color: #1f2937;
     margin-bottom: 5px;
-    max-height: 450px;
+    max-height: 350px;
     /* overflow: hidden; */
     overflow-y: auto;
 }
@@ -187,11 +225,27 @@ li input[type="text"]:focus {
     border-color: #764ba2;
 }
 
+li.editing {
+    background: #fef3c7;
+    /* Light yellow/amber background */
+    border: 2px solid #f59e0b;
+    /* Orange border */
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+    /* Glow effect */
+}
+
 /* Completed task styling */
-li.completed span {
+li.completed span.taskDisplay {
     text-decoration: line-through;
     /* opacity: 0.5; */
     color: #9ca3af;
+}
+
+span.edit-icon {
+    max-width: fit-content;
+    max-height: fit-content;
+    /* font-size: 18px; */
+    /* margin-right: 5px; */
 }
 
 /* Delete button */

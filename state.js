@@ -2,6 +2,7 @@
 export let tasks = [];
 export let editingTaskId = null;
 export let currentFilter = "all";
+export let searchQuery = "";
 
 // Setter functions allow other modules to update state variables
 // Direct reassignment (tasks = [...]) only works within this module
@@ -17,6 +18,10 @@ export function setEditingTaskId(taskId) {
     editingTaskId = taskId;
 }
 
+export function setSearchQuery(taskTitle) {
+    searchQuery = taskTitle;
+}
+
 // Mutating task[] is allowed in other modules, but using
 // functions keeps state management centralized and cleaner
 
@@ -27,9 +32,4 @@ export function addTask(title) {
         title, // ES6 shorthand for title: title
         completed: false,
     })
-}
-
-// removes the most recently added task
-export function removeLastTask(taskList) {
-    taskList.pop();
 }
