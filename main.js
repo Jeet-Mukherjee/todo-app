@@ -1,9 +1,10 @@
-import { loadFilter, loadTasks } from "./storage.js";
+import { loadFilter, loadLastDeleted, loadTasks } from "./storage.js";
 import { renderTasks } from "./render.js";
-import { addTaskEvent, deleteCompletedTasksEvent, delLastTaskEvent, delTaskByIdEvent, editTitleEvent, editCurrentFilterEvent, toggleCheckboxEvent, deleteAllTasksEvent, FilterBySearchEvent } from "./events.js";
+import { addTaskEvent, deleteCompletedTasksEvent, delLastTaskEvent, delTaskByIdEvent, editTitleEvent, editCurrentFilterEvent, toggleCheckboxEvent, deleteAllTasksEvent, FilterBySearchEvent, undoLastDelEvent } from "./events.js";
 
 loadTasks();
 loadFilter();
+loadLastDeleted();
 renderTasks();
 addTaskEvent();
 toggleCheckboxEvent();
@@ -14,3 +15,4 @@ editCurrentFilterEvent();
 deleteCompletedTasksEvent();
 deleteAllTasksEvent();
 FilterBySearchEvent();
+undoLastDelEvent();

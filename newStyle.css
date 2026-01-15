@@ -103,7 +103,8 @@ div.buttonContainer {
 #addBtn,
 #lastTaskBtn,
 #clearCTaskBtn,
-#clearAllTasksBtn {
+#clearAllTasksBtn,
+#undoLastDel {
     padding: 12px 24px;
     border: none;
     border-radius: 8px;
@@ -156,6 +157,18 @@ div.buttonContainer {
     background-color: #dc2626;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+#undoLastDel {
+    background-color: #ef4444;
+    color: white;
+}
+
+#undoLastDel:hover {
+    background-color: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+
 }
 
 /* Task list */

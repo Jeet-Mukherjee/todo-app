@@ -3,6 +3,7 @@ export let tasks = [];
 export let editingTaskId = null;
 export let currentFilter = "all";
 export let searchQuery = "";
+export let lastTaskDeleted = null; // attention
 
 // Setter functions allow other modules to update state variables
 // Direct reassignment (tasks = [...]) only works within this module
@@ -32,4 +33,8 @@ export function addTask(title) {
         title, // ES6 shorthand for title: title
         completed: false,
     })
+}
+
+export function setLastTaskDeleted(deletedTask) {
+    lastTaskDeleted = deletedTask;
 }

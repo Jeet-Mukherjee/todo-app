@@ -66,7 +66,7 @@ export const countClearTasksMsg = (() => {
         msgTimeoutId = setTimeout(() => {
             msgElement.textContent = ""; // Non-breaking space
             msgElement.classList.add("hidden");
-        }, 3000);
+        }, 500);
     };
 })();
 
@@ -82,7 +82,8 @@ export const emptyStateMsg = (() => {
         msgTimeoutId = setTimeout(() => {
             msgElement.textContent = ""; // Non-breaking space
             msgElement.classList.add("hidden");
-        }, 3000);
+
+        }, 500);
     };
 })();
 
@@ -102,7 +103,7 @@ export const duplicateTaskMsg = (() => {
             msgTimeoutId = setTimeout(() => {
                 msgElement.textContent = "";
                 msgElement.classList.add("hidden");
-            }, 3000);
+            }, 300);
         }
     }
 })();

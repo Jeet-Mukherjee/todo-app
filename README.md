@@ -10,14 +10,14 @@ A modular todo application built with vanilla JavaScript to practice clean code 
 - Clear completed tasks
 - Clear all tasks
 - Data persistence using localStorage
-- tasks search/filter by text(with counter)
+- Tasks search/filter by text(with counter)
+- Undo last delete(single-task delete only)
 
 ## Status: Work in Progress
 
 Currently working on:
-- [ ] undo last delete
-- [ ] task reordering (drag & drop or up/down buttons)
 
+- [ ] task reordering (drag & drop or up/down buttons)
 
 ## Technologies Used
 

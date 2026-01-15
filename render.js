@@ -22,17 +22,13 @@ export function renderTasks() {
                 noTaskMsg = `no ${currentFilter} tasks yet`;
             }
         }
-
         taskMsgEl.textContent = noTaskMsg;
         taskListEl.appendChild(taskMsgEl);
-        handleButtonStates(); // need attention
+        handleButtonStates();
         updateFilterButtons();
         countFilteredTasksHandler();
-        // updateSearchCount();
         return;
     }
-
-
 
     taskList.forEach((task) => {
         // create all elements
@@ -94,7 +90,6 @@ export function renderTasks() {
     countFilteredTasksHandler();
     updateSearchCount();
 }
-
 
 export function handleButtonStates() {
     const isEditing = editingTaskId !== null;
