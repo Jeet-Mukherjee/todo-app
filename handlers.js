@@ -87,9 +87,6 @@ export const emptyStateMsg = (() => {
     };
 })();
 
-
-
-
 export const duplicateTaskMsg = (() => {
     let msgTimeoutId = null;
 
@@ -108,8 +105,6 @@ export const duplicateTaskMsg = (() => {
     }
 })();
 
-
-// bug => count.length dont show 0
 export function updateSearchCount() {
     const filteredCountEl = document.querySelector("p#filteredCount");
     if (!filteredCountEl) return;

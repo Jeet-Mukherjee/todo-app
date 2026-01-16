@@ -1,4 +1,4 @@
-import { tasks, addTask, setTasks, editingTaskId, setEditingTaskId, setCurrentFilter, currentFilter, setSearchQuery, lastTaskDeleted, setLastTaskDeleted } from "./state.js";
+import { tasks, addTask, setTasks, editingTaskId, setEditingTaskId, setCurrentFilter, currentFilter, setSearchQuery, lastTaskDeleted, setLastTaskDeleted, moveTaskUp, moveTaskDown } from "./state.js";
 import { saveFilter, saveLastDeleted, saveTasks } from "./storage.js";
 import { renderTasks } from "./render.js";
 import { countClearTasksMsg, addTaskHandler, duplicateTaskMsg, filterTasksHandler, emptyStateMsg } from "./handlers.js";
@@ -22,18 +22,16 @@ export function addTaskEvent() {
 }
 
 export function editTitleEvent() {
-
     const elTaskListContainer = document.querySelector("ul#taskList");
 
     elTaskListContainer.addEventListener("click", (e) => {
-
         const taskTitleElement = e.target.closest("span");
         const taskContainer = e.target.closest("li");
         if (!taskTitleElement || !taskContainer) return;
 
         setEditingTaskId(Number(taskContainer.dataset.id));
-
         renderTasks();
+
         const targetContainer = document.querySelector(`li[data-id="${editingTaskId}"]`);
         if (!targetContainer) return;
 
@@ -42,16 +40,20 @@ export function editTitleEvent() {
 
         taskInputElement.focus();
 
-        taskInputElement.addEventListener("keydown", (e) => {
+        // Define handlers as named functions so we can remove them
+        const handleKeydown = (e) => {
+            const taskToEdit = tasks.find(t => t.id === editingTaskId);
+            if (!taskToEdit) return;
 
-            let newTitle = taskInputElement.value.trim().replace(/\s+/g, ' ');
-            let taskToEdit = tasks.find(t => t.id === editingTaskId);
             if (e.key === "Enter") {
-                let oldTitle = taskToEdit.title;
+                const newTitle = taskInputElement.value.trim().replace(/\s+/g, ' ');
+                const oldTitle = taskToEdit.title;
+
                 if (!newTitle || (oldTitle === newTitle)) {
                     e.preventDefault();
                     return;
                 }
+
                 duplicateTaskMsg(newTitle);
                 taskToEdit.title = newTitle;
                 setEditingTaskId(null);
@@ -61,18 +63,20 @@ export function editTitleEvent() {
             else if (e.key === "Escape") {
                 setEditingTaskId(null);
                 renderTasks();
-                return;
             }
+        };
 
-        });
-
-        taskInputElement.addEventListener("blur", () => {
+        const handleBlur = () => {
             if (editingTaskId === null) return;
             setEditingTaskId(null);
             renderTasks();
-        });
-    })
-};
+        };
+
+        // Add listeners
+        taskInputElement.addEventListener("keydown", handleKeydown);
+        taskInputElement.addEventListener("blur", handleBlur);
+    });
+}
 
 export function toggleCheckboxEvent() {
 
@@ -128,6 +132,9 @@ export function delTaskByIdEvent() {
     elTaskListContainer.addEventListener("click", (e) => {
         const clickedBtn = e.target.closest("button");
         if (!clickedBtn) return;
+
+        // only handle delete action    
+        if (clickedBtn.dataset.action !== "delete") return;
 
         const taskId = Number(clickedBtn.dataset.id);
         const selectedTask = tasks.find(t => t.id === taskId);
@@ -208,6 +215,15 @@ export function FilterBySearchEvent() {
         renderTasks();
     });
 
+    taskSearchEl.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            taskSearchEl.value = "";
+            setSearchQuery("");
+            renderTasks();
+            taskSearchEl.blur(); // Optional: removes focus from the input
+        }
+    });
+
     taskSearchEl.addEventListener("blur", () => {
         taskSearchEl.value = "";
         setSearchQuery("");
@@ -230,5 +246,29 @@ export function undoLastDelEvent() {
             saveLastDeleted();
             renderTasks();
         }
+    });
+}
+
+export function moveTaskEvent() {
+    const taskListContainer = document.querySelector("ul#taskList");
+    if (!taskListContainer) return;
+
+    taskListContainer.addEventListener("click", (e) => {
+        const clickedBtn = e.target.closest("button");
+        if (!clickedBtn) return;
+
+        const action = clickedBtn.dataset.action;
+        if (action !== "up" && action !== "down") return;
+
+        const taskId = Number(clickedBtn.dataset.id);
+
+        if (action == "up") {
+            moveTaskUp(taskId);
+        } else if (action === "down") {
+            moveTaskDown(taskId);
+        }
+
+        saveTasks();
+        renderTasks();
     });
 }

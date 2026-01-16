@@ -38,3 +38,33 @@ export function addTask(title) {
 export function setLastTaskDeleted(deletedTask) {
     lastTaskDeleted = deletedTask;
 }
+
+export function moveTaskUp(taskId) {
+    const pendingTasks = tasks.filter(t => t.completed === false);
+
+    const pendingIndex = pendingTasks.findIndex(t => t.id === taskId);
+
+    if (pendingIndex <= 0) return;
+
+    const taskToSwap = pendingTasks[pendingIndex - 1];
+
+    const index1 = tasks.findIndex(t => t.id === taskId);
+    const index2 = tasks.findIndex(t => t.id === taskToSwap.id);
+
+    [tasks[index1], tasks[index2]] = [tasks[index2], tasks[index1]];
+}
+
+export function moveTaskDown(taskId) {
+    const pendingTasks = tasks.filter(t => t.completed === false);
+
+    const pendingIndex = pendingTasks.findIndex(t => t.id === taskId);
+
+    if (pendingIndex >= pendingTasks.length - 1) return;
+
+    const taskToSwap = pendingTasks[pendingIndex + 1];
+
+    const index1 = tasks.findIndex(t => t.id === taskId);
+    const index2 = tasks.findIndex(t => t.id === taskToSwap.id);
+
+    [tasks[index1], tasks[index2]] = [tasks[index2], tasks[index1]];
+}

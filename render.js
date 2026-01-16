@@ -10,6 +10,14 @@ export function renderTasks() {
     taskListEl.innerText = taskListTitle.toUpperCase();
     let noTaskMsg = "no tasks yet";
 
+    // hint about reordering
+    if (currentFilter !== "pending" && taskList.length > 0) {
+        const hint = document.createElement("p");
+        hint.classList.add("notify");
+        hint.textContent = "Switch to 'Pending' to reorder tasks";
+        taskListEl.appendChild(hint);
+    }
+
     if (taskList.length === 0) {
         const filteredCount = document.querySelector("p#filteredCount");
         filteredCount.classList.add("hidden");
@@ -73,9 +81,36 @@ export function renderTasks() {
 
         }
 
+        // button container for up/down button
+        const buttonGroup = document.createElement("div");
+        buttonGroup.classList.add("task-buttons");
+
+        const upBtn = document.createElement("button");
+        upBtn.dataset.id = task.id;
+        upBtn.dataset.action = "up";
+        upBtn.textContent = "↑";
+        upBtn.classList.add("move-btn");
+        if (task.id === editingTaskId || currentFilter !== "pending" || searchQuery !== "") {
+            upBtn.disabled = true;
+        }
+        buttonGroup.appendChild(upBtn);
+
+        const downBtn = document.createElement("button");
+        downBtn.dataset.id = task.id;
+        downBtn.dataset.action = "down";
+        downBtn.textContent = "↓";
+        downBtn.classList.add("move-btn");
+        if (task.id === editingTaskId || currentFilter !== "pending" || searchQuery !== "") {
+            downBtn.disabled = true;
+        }
+        buttonGroup.appendChild(downBtn);
+
+        li.appendChild(buttonGroup);
+
         // create and configure the delete button
         const delBtn = document.createElement("button");
         delBtn.dataset.id = task.id;
+        delBtn.dataset.action = "delete";
         delBtn.textContent = "Delete";
         li.appendChild(delBtn);
         if (task.id === editingTaskId) {
