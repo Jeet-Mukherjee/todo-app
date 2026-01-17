@@ -35,8 +35,8 @@ export function addTask(title) {
     })
 }
 
-export function setLastTaskDeleted(deletedTask) {
-    lastTaskDeleted = deletedTask;
+export function setLastTaskDeleted(deletedTaskData) {
+    lastTaskDeleted = deletedTaskData;
 }
 
 export function moveTaskUp(taskId) {

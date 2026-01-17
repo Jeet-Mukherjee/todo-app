@@ -108,15 +108,25 @@ export function delLastTaskEvent() {
         return;
     };
     delLastTaskBtn.addEventListener("click", () => {
+
         const taskList = filterTasksHandler(currentFilter);
+
         if (taskList.length === 0) {
             emptyStateMsg();
             return;
         }
-        // removeLastTask(taskList);
+
         const lastTask = taskList[taskList.length - 1];
-        setLastTaskDeleted(lastTask);
+
+        const taskIndex = taskList.findIndex(t => t.id === lastTask.id);
+
+        setLastTaskDeleted({
+            task: lastTask,
+            index: taskIndex
+        });
+
         const newTasks = tasks.filter(t => t.id !== lastTask.id);
+
         setTasks(newTasks);
         saveTasks();
         saveLastDeleted();
@@ -127,13 +137,12 @@ export function delLastTaskEvent() {
 
 export function delTaskByIdEvent() {
     const elTaskListContainer = document.querySelector("ul#taskList");
-    // let isDeleting = false;
 
     elTaskListContainer.addEventListener("click", (e) => {
         const clickedBtn = e.target.closest("button");
         if (!clickedBtn) return;
 
-        // only handle delete action    
+        // only handle delete action  
         if (clickedBtn.dataset.action !== "delete") return;
 
         const taskId = Number(clickedBtn.dataset.id);
@@ -142,7 +151,13 @@ export function delTaskByIdEvent() {
         if (!selectedTask) {
             return;
         }
-        setLastTaskDeleted(selectedTask);
+
+        const taskIndex = tasks.findIndex(t => t.id === taskId);
+
+        setLastTaskDeleted({
+            task: selectedTask,
+            index: taskIndex
+        });
 
         const newTasks = tasks.filter(t => t.id !== selectedTask.id);
 
@@ -239,13 +254,17 @@ export function undoLastDelEvent() {
         if (!lastTaskDeleted) {
             emptyStateMsg();
             return;
-        } else {
-            tasks.push(lastTaskDeleted);
-            setLastTaskDeleted(null);
-            saveTasks();
-            saveLastDeleted();
-            renderTasks();
         }
+
+        const { task, index } = lastTaskDeleted;
+
+        tasks.splice(index, 0, task);
+
+        setLastTaskDeleted(null);
+        saveTasks();
+        saveLastDeleted();
+        renderTasks();
+
     });
 }
 
