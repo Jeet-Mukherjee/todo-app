@@ -1,7 +1,7 @@
 import { tasks, addTask, setTasks, editingTaskId, setEditingTaskId, setCurrentFilter, currentFilter, setSearchQuery, lastTaskDeleted, setLastTaskDeleted, moveTaskUp, moveTaskDown } from "./state.js";
 import { saveFilter, saveLastDeleted, saveTasks } from "./storage.js";
 import { renderTasks } from "./render.js";
-import { countClearTasksMsg, addTaskHandler, duplicateTaskMsg, filterTasksHandler, emptyStateMsg } from "./handlers.js";
+import { countClearTasksMsg, addTaskHandler, duplicateTaskMsg, filterTasksByStatus, emptyStateMsg } from "./handlers.js";
 
 export function addTaskEvent() {
 
@@ -109,7 +109,7 @@ export function delLastTaskEvent() {
     };
     delLastTaskBtn.addEventListener("click", () => {
 
-        const taskList = filterTasksHandler(currentFilter);
+        const taskList = filterTasksByStatus(currentFilter);
 
         if (taskList.length === 0) {
             emptyStateMsg();
@@ -289,5 +289,17 @@ export function moveTaskEvent() {
 
         saveTasks();
         renderTasks();
+
+        // Add animation class to the moved task
+        setTimeout(() => {
+            const movedTaskEl = document.querySelector(`li[data-id="${taskId}"]`);
+            if (movedTaskEl) {
+                movedTaskEl.classList.add("just-moved");
+                // Remove class after animation completes
+                setTimeout(() => {
+                    movedTaskEl.classList.remove("just-moved");
+                }, 500);
+            }
+        }, 0);
     });
 }

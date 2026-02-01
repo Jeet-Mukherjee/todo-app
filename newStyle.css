@@ -131,44 +131,17 @@ div.buttonContainer {
     color: white;
 }
 
-#lastTaskBtn:hover {
-    background: #dc2626;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-}
 
-#clearCTaskBtn {
+
+.btn-red {
     background: #ef4444;
     color: white;
 }
 
-#clearCTaskBtn:hover {
+.btn-red:hover {
     background: #dc2626;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-}
-
-#clearAllTasksBtn {
-    background-color: #ef4444;
-    color: white;
-}
-
-#clearAllTasksBtn:hover {
-    background-color: #dc2626;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-}
-
-#undoLastDel {
-    background-color: #ef4444;
-    color: white;
-}
-
-#undoLastDel:hover {
-    background-color: #dc2626;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-
 }
 
 /* Task list */
@@ -201,7 +174,7 @@ li {
     max-width: 100%;
     background: #f9fafb;
     border-radius: 8px;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
 }
 
 li:hover {
@@ -293,6 +266,10 @@ li button:disabled {
     margin-left: auto;
 }
 
+.task-buttons.hidden {
+    display: none;
+}
+
 /* Move buttons */
 .move-btn {
     padding: 6px 10px;
@@ -307,7 +284,7 @@ li button:disabled {
 }
 
 .move-btn:hover {
-    background: #5568d3;
+    background: black;
     transform: scale(1.1);
 }
 
@@ -358,6 +335,45 @@ div.filters button.active {
     color: #059669;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     animation: slideIn 0.3s ease-out;
+}
+
+#errorMsg {
+    background: #fee2e2;
+    /* Light red background */
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #dc2626;
+    /* Red text */
+    border: 1px solid #fca5a5;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.2);
+    animation: slideIn 0.3s ease-out;
+}
+
+#errorMsg.hidden {
+    display: none;
+}
+
+/* Optional: Shake animation for errors */
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+#errorMsg.shake {
+    animation: shake 0.3s ease-in-out;
 }
 
 #filteredCount {
@@ -423,4 +439,21 @@ ul#taskList::-webkit-scrollbar-thumb:hover {
 ul#taskList {
     scrollbar-width: thin;
     scrollbar-color: rgba(102, 126, 234, 0.5) transparent;
+}
+
+/* highlight animation when task moves */
+@keyframes taskMove {
+    0% {
+        background: #528ad4;
+        transform: scale(1.02);
+    }
+
+    100% {
+        background: #f9fafb;
+        transform: scale(1);
+    }
+}
+
+li.just-moved {
+    animation: taskMove 0.5s ease;
 }

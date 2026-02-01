@@ -1,10 +1,10 @@
 // Manages rendering tasks to the DOM
-import { countFilteredTasksHandler, filterBySearchHandler, updateFilterButtons, updateSearchCount } from "./handlers.js";
+import { countFilteredTasksHandler, getVisibleTasks, searchTasks, updateFilterButtons, updateSearchCount } from "./handlers.js";
 import { currentFilter, editingTaskId, searchQuery } from "./state.js";
 
 // Renders filtered tasks to the DOM based on current filter and editing state
 export function renderTasks() {
-    const taskList = filterBySearchHandler();
+    const taskList = getVisibleTasks();
     const taskListEl = document.querySelector("ul#taskList");
     let taskListTitle = currentFilter + " tasks";
     taskListEl.innerText = taskListTitle.toUpperCase();
@@ -84,15 +84,18 @@ export function renderTasks() {
         // button container for up/down button
         const buttonGroup = document.createElement("div");
         buttonGroup.classList.add("task-buttons");
+        if (task.id === editingTaskId || currentFilter !== "pending" || searchQuery !== "") {
+            buttonGroup.classList.add('hidden');
+        }
 
         const upBtn = document.createElement("button");
         upBtn.dataset.id = task.id;
         upBtn.dataset.action = "up";
         upBtn.textContent = "↑";
         upBtn.classList.add("move-btn");
-        if (task.id === editingTaskId || currentFilter !== "pending" || searchQuery !== "") {
-            upBtn.disabled = true;
-        }
+        // if (task.id === editingTaskId || currentFilter !== "pending" || searchQuery !== "") {
+        //     upBtn.disabled = true;
+        // }
         buttonGroup.appendChild(upBtn);
 
         const downBtn = document.createElement("button");
@@ -100,9 +103,9 @@ export function renderTasks() {
         downBtn.dataset.action = "down";
         downBtn.textContent = "↓";
         downBtn.classList.add("move-btn");
-        if (task.id === editingTaskId || currentFilter !== "pending" || searchQuery !== "") {
-            downBtn.disabled = true;
-        }
+        // if (task.id === editingTaskId || currentFilter !== "pending" || searchQuery !== "") {
+        //     downBtn.disabled = true;
+        // }
         buttonGroup.appendChild(downBtn);
 
         li.appendChild(buttonGroup);
