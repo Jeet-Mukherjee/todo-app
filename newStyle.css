@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     /* min-height: 100vh; */
     min-height: 100vh;
@@ -56,7 +56,6 @@ div.filters button:hover {
     /* padding: 8px; */
     border-radius: 12px;
     /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
-
 }
 
 #taskInput {
@@ -96,7 +95,6 @@ div.buttonContainer {
     /* padding: 8px; */
     border-radius: 12px;
     /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
-
 }
 
 /* Action buttons */
@@ -131,8 +129,6 @@ div.buttonContainer {
     color: white;
 }
 
-
-
 .btn-red {
     background: #ef4444;
     color: white;
@@ -156,7 +152,7 @@ ul#taskList {
     font-size: 18px;
     font-weight: 600;
     color: #1f2937;
-    margin-bottom: 5px;
+    margin-bottom: 20px;
     max-height: 350px;
     /* overflow: hidden; */
     overflow-y: auto;
@@ -306,8 +302,6 @@ li button:disabled {
     }
 }
 
-
-
 div.filters button.active {
     background: #667eea;
     color: white;
@@ -357,7 +351,6 @@ div.filters button.active {
 
 /* Optional: Shake animation for errors */
 @keyframes shake {
-
     0%,
     100% {
         transform: translateX(0);
@@ -413,7 +406,7 @@ ul#taskList p.notify {
     color: #9ca3af;
     font-size: 16px;
     font-weight: 400;
-    padding: 15px;
+    padding: 5px;
     font-style: italic;
 }
 

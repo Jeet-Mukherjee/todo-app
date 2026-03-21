@@ -1,14 +1,16 @@
 // Manages rendering tasks to the DOM
-import { countFilteredTasksHandler, getVisibleTasks, searchTasks, updateFilterButtons, updateSearchCount } from "./handlers.js";
+import { updateTaskCount, getVisibleTasks, updateFilterButtons, updateSearchCount } from "./handlers.js";
 import { currentFilter, editingTaskId, searchQuery } from "./state.js";
 
 // Renders filtered tasks to the DOM based on current filter and editing state
 export function renderTasks() {
+    // get tasklist 
     const taskList = getVisibleTasks();
+
+    // tasklist heading
     const taskListEl = document.querySelector("ul#taskList");
     let taskListTitle = currentFilter + " tasks";
     taskListEl.innerText = taskListTitle.toUpperCase();
-    let noTaskMsg = "no tasks yet";
 
     // hint about reordering
     if (currentFilter !== "pending" && taskList.length > 0) {
@@ -18,6 +20,8 @@ export function renderTasks() {
         taskListEl.appendChild(hint);
     }
 
+    // notification msg => tasklist is empty
+    let noTaskMsg = "no tasks yet";
     if (taskList.length === 0) {
         const filteredCount = document.querySelector("p#filteredCount");
         filteredCount.classList.add("hidden");
@@ -31,10 +35,11 @@ export function renderTasks() {
             }
         }
         taskMsgEl.textContent = noTaskMsg;
+
         taskListEl.appendChild(taskMsgEl);
-        handleButtonStates();
+        updateButtonStates();
         updateFilterButtons();
-        countFilteredTasksHandler();
+        updateTaskCount();
         return;
     }
 
@@ -93,9 +98,6 @@ export function renderTasks() {
         upBtn.dataset.action = "up";
         upBtn.textContent = "↑";
         upBtn.classList.add("move-btn");
-        // if (task.id === editingTaskId || currentFilter !== "pending" || searchQuery !== "") {
-        //     upBtn.disabled = true;
-        // }
         buttonGroup.appendChild(upBtn);
 
         const downBtn = document.createElement("button");
@@ -103,9 +105,6 @@ export function renderTasks() {
         downBtn.dataset.action = "down";
         downBtn.textContent = "↓";
         downBtn.classList.add("move-btn");
-        // if (task.id === editingTaskId || currentFilter !== "pending" || searchQuery !== "") {
-        //     downBtn.disabled = true;
-        // }
         buttonGroup.appendChild(downBtn);
 
         li.appendChild(buttonGroup);
@@ -123,16 +122,20 @@ export function renderTasks() {
         // append li to ul#taskList
         taskListEl.appendChild(li);
     });
-    handleButtonStates();
+    updateButtonStates();
     updateFilterButtons();
-    countFilteredTasksHandler();
+    updateTaskCount();
     updateSearchCount();
 }
 
-export function handleButtonStates() {
+export function updateButtonStates() {
     const isEditing = editingTaskId !== null;
-    const clrCTaskBtn = document.querySelector("button#clearCTaskBtn");
-    const delLastTaskBtn = document.querySelector("button#lastTaskBtn");
-    clrCTaskBtn.disabled = isEditing;
-    delLastTaskBtn.disabled = isEditing;
+    const completedTasks = document.querySelector("button#clearCTaskBtn");
+    const lastTasks = document.querySelector("button#lastTaskBtn");
+    const allTasks = document.querySelector("button#clearAllTasksBtn");
+    const undoLastDel = document.querySelector("button#undoLastDel");
+    completedTasks.disabled = isEditing;
+    lastTasks.disabled = isEditing;
+    allTasks.disabled = isEditing;
+    undoLastDel.disabled = isEditing;
 }

@@ -1,7 +1,7 @@
 import { tasks, addTask, setTasks, editingTaskId, setEditingTaskId, setCurrentFilter, currentFilter, setSearchQuery, lastTaskDeleted, setLastTaskDeleted, moveTaskUp, moveTaskDown } from "./state.js";
 import { saveFilter, saveLastDeleted, saveTasks } from "./storage.js";
-import { renderTasks } from "./render.js";
-import { countClearTasksMsg, addTaskHandler, duplicateTaskMsg, filterTasksByStatus, emptyStateMsg } from "./handlers.js";
+import { renderTasks, updateButtonStates } from "./render.js";
+import { countClearTasksMsg, addTaskHandler, duplicateTaskMsg, filterTasks, emptyStateMsg } from "./handlers.js";
 
 export function addTaskEvent() {
 
@@ -31,6 +31,7 @@ export function editTitleEvent() {
 
         setEditingTaskId(Number(taskContainer.dataset.id));
         renderTasks();
+        updateButtonStates();
 
         const targetContainer = document.querySelector(`li[data-id="${editingTaskId}"]`);
         if (!targetContainer) return;
@@ -109,7 +110,7 @@ export function delLastTaskEvent() {
     };
     delLastTaskBtn.addEventListener("click", () => {
 
-        const taskList = filterTasksByStatus(currentFilter);
+        const taskList = filterTasks(currentFilter);
 
         if (taskList.length === 0) {
             emptyStateMsg();

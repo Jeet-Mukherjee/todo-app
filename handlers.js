@@ -1,4 +1,4 @@
-import { addTask, tasks, currentFilter, searchQuery, setSearchQuery } from "./state.js";
+import { addTask, tasks, currentFilter, searchQuery } from "./state.js";
 import { saveTasks } from "./storage.js";
 import { renderTasks } from "./render.js";
 
@@ -14,7 +14,7 @@ export function addTaskHandler(inputElement) {
     renderTasks();
 }
 
-export function filterTasksByStatus(filter) {
+export function filterTasks(filter) {
     if (filter === "all") return tasks;
     if (filter === "completed") return tasks.filter(t => t.completed);
     if (filter === "pending") return tasks.filter(t => !t.completed);
@@ -26,16 +26,16 @@ export function searchTasks(taskList, query) {
 }
 
 export function getVisibleTasks() { // render.js 7:
-    const filtered = filterTasksByStatus(currentFilter);
+    const filtered = filterTasks(currentFilter);
     const searched = searchTasks(filtered, searchQuery);
     return searched;
 }
 
-export function countFilteredTasksHandler() {
-    const taskList = filterTasksByStatus(currentFilter);
+export function updateTaskCount() {
+    const taskList = filterTasks(currentFilter);
     const tasksCountEl = document.querySelector("p#tasksCount");
     const filterName = currentFilter.charAt(0).toUpperCase() + currentFilter.slice(1);
-    tasksCountEl.textContent = `${filterName} tasks: ${taskList.length} / ${tasks.length}`;
+    tasksCountEl.textContent = `${filterName} tasks: ${taskList.length}`;
 }
 
 export const countClearTasksMsg = (() => {
@@ -89,7 +89,7 @@ export function updateSearchCount() {
     if (!filteredCountEl) return;
 
     if (searchQuery !== "" && searchQuery.trim() !== "") {
-        const searchedTaskList = searchTasks(searchQuery);
+        const searchedTaskList = getVisibleTasks();
         filteredCountEl.classList.remove("hidden");
         filteredCountEl.textContent = `${searchedTaskList.length} tasks match "${searchQuery}"`;
     } else {
